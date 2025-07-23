@@ -1,13 +1,12 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  signInWithEmail, 
-  signUpWithEmail, 
-  signOutUser, 
-  getCurrentUserData,
-  AuthUser 
-} from './auth-service';
+
+// Define a mock AuthUser type
+interface AuthUser {
+  name: string;
+  email: string;
+}
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -35,7 +34,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check for stored user session on mount
   useEffect(() => {
     const checkStoredSession = async () => {
       try {
@@ -58,7 +56,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleSignIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const userData = await signInWithEmail(email, password);
+      const userData: AuthUser = {
+        email,
+        name: email.split('@')[0], // mock name from email
+      };
       setUser(userData);
       localStorage.setItem('mindrift_user', JSON.stringify(userData));
     } catch (error) {
@@ -71,7 +72,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleSignUp = async (email: string, password: string, name: string) => {
     setIsLoading(true);
     try {
-      const userData = await signUpWithEmail(email, password, name);
+      const userData: AuthUser = {
+        email,
+        name,
+      };
       setUser(userData);
       localStorage.setItem('mindrift_user', JSON.stringify(userData));
     } catch (error) {
@@ -83,7 +87,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const handleSignOut = async () => {
     try {
-      await signOutUser();
       setUser(null);
       localStorage.removeItem('mindrift_user');
     } catch (error) {

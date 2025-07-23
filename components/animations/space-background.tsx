@@ -12,7 +12,8 @@ export const SpaceBackground: React.FC<SpaceBackgroundProps> = ({ className }) =
   const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
     // Setup scene
     const scene = new THREE.Scene();
@@ -110,9 +111,8 @@ export const SpaceBackground: React.FC<SpaceBackgroundProps> = ({ className }) =
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-      window.removeEventListener('resize', handleResize);
-      if (containerRef.current && containerRef.current.contains(renderer.domElement)) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (container && container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
       }
       scene.remove(stars);
       scene.remove(pixels);
