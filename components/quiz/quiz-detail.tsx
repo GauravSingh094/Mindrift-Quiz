@@ -261,7 +261,7 @@ export function QuizDetail({ quizId }: QuizDetailProps) {
           </div>
           <h3 className="text-xl font-semibold">Quiz Not Found</h3>
           <p className="text-muted-foreground">
-            The quiz you're looking for doesn't exist or has been removed.
+            The quiz you&#39;re looking for doesn&#39;t exist or has been removed.
           </p>
           <Button asChild>
             <Link href="/quizzes">Browse Quizzes</Link>
@@ -305,7 +305,7 @@ export function QuizDetail({ quizId }: QuizDetailProps) {
         <CardHeader>
           <CardTitle>Quiz Details</CardTitle>
           <CardDescription>
-            This quiz contains {questionCount} questions. Make sure you're ready before starting!
+            This quiz contains {questionCount} questions. Make sure you&#39;re ready before starting!
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
