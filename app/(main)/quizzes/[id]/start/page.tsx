@@ -241,7 +241,7 @@ export default function CompetitionStartPage() {
             <AlertTriangle className="h-12 w-12 text-red-400 mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-red-400">Competition Not Found</h3>
             <p className="text-red-300 text-center mb-4">
-              The competition you're trying to access doesn't exist or has been removed.
+              The competition you&#39;re trying to access doesn&#39;t exist or has been removed.
             </p>
             <Button onClick={() => router.push('/admin/competitions/join')} variant="outline">
               Return to Join Competition
@@ -436,7 +436,7 @@ export default function CompetitionStartPage() {
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                <p>• Make sure you're in a quiet environment</p>
+                <p>• Make sure you&#39;re in a quiet environment</p>
                 <p>• Close unnecessary browser tabs</p>
                 <p>• Ensure stable internet connection</p>
               </div>

@@ -1,52 +1,7 @@
-// Mock Authentication Service (replaces Firebase Auth)
 
-export interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  provider?: string;
-  createdAt?: Date;
-  lastLoginAt?: Date;
-}
-
-// Mock user database (in production, use a real DB)
-const mockUsers: Map<string, { password: string; user: AuthUser }> = new Map();
-
-// Demo user for testing
-mockUsers.set('demo@mindrift.com', {
-  password: 'demo123',
-  user: {
-    id: 'demo-user-1',
-    name: 'Demo User',
-    email: 'demo@mindrift.com',
-    provider: 'email',
-    createdAt: new Date(),
-    lastLoginAt: new Date(),
-  },
-});
-
-// Simple password hashing (use bcrypt in production)
-const hashPassword = (password: string): string => btoa(password);
-const verifyPassword = (password: string, hash: string): boolean => btoa(password) === hash;
-
-// Email/Password Sign In
-export const signInWithEmail = async (
-  email: string,
-  password: string
-): Promise<AuthUser> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   const userRecord = mockUsers.get(email.toLowerCase());
 
-  if (!userRecord) throw new Error('No account found with this email.');
-  if (!verifyPassword(password, userRecord.password))
-    throw new Error('Incorrect password.');
-
-  userRecord.user.lastLoginAt = new Date();
-  return userRecord.user;
-};
-
-// Email/Password Sign Up
+ 
 export const signUpWithEmail = async (
   email: string,
   password: string,
