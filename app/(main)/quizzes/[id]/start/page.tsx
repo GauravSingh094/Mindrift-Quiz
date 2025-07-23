@@ -36,51 +36,8 @@ export default function CompetitionStartPage() {
   const router = useRouter();
   const { toast } = useToast();
   const { user } = useAuth();
-  const competitionId = params.id as string;
   
-  const [competition, setCompetition] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasAccepted, setHasAccepted] = useState(false);
-  const [isStarting, setIsStarting] = useState(false);
-  
-  const [antiCheatState, setAntiCheatState] = useState<AntiCheatState>({
-    tabSwitchCount: 0,
-    copyPasteAttempts: 0,
-    isBlocked: false,
-    blockEndTime: null,
-    warnings: [],
-    isMonitoring: false
-  });
-
-  // Refs for cleanup
-  const visibilityChangeHandler = useRef<(() => void) | null>(null);
-
-  // Load competition data
-  useEffect(() => {
-    const loadCompetition = async () => {
-      if (!competitionId) return;
-      
-      try {
-        const comp = await CompetitionFirestoreService.getCompetition(competitionId);
-        if (!comp) {
-          throw new Error('Competition not found');
-        }
-        setCompetition(comp);
-      } catch (error) {
-        console.error('Error loading competition:', error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to load competition. Please try again.",
-        });
-        router.push('/admin/competitions/join');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadCompetition();
-  }, [competitionId, router, toast]);
+  // (The misplaced code block above has been removed. If this was meant to be inside a function, please ensure it is placed within the correct function body.)
 
   // Anti-cheat: Monitor tab switching
   useEffect(() => {
@@ -142,7 +99,7 @@ export default function CompetitionStartPage() {
         document.removeEventListener('visibilitychange', visibilityChangeHandler.current);
       }
     };
-  }, [antiCheatState.isMonitoring, competition, antiCheatState.isBlocked, toast]);
+  }, [toast]);
 
   // Anti-cheat: Monitor copy/paste
   useEffect(() => {
@@ -178,7 +135,7 @@ export default function CompetitionStartPage() {
       document.removeEventListener('paste', handleCopyPaste);
       document.removeEventListener('cut', handleCopyPaste);
     };
-  }, [antiCheatState.isMonitoring, competition, toast]);
+  }, [toast]);
 
   const handleAcceptTerms = () => {
     setHasAccepted(true);
