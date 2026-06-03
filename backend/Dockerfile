@@ -11,8 +11,9 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 # Enforce security best practices: Run under a non-root system user
 RUN addgroup -S SreAdmin && adduser -S SreAdmin -G SreAdmin
+RUN mkdir -p /app/logs && chown -R SreAdmin:SreAdmin /app
 USER SreAdmin
-COPY --from=builder /app/target/mindrift-backend-1.0.0.jar mindrift.jar
+COPY --chown=SreAdmin:SreAdmin --from=builder /app/target/mindrift-backend-1.0.0.jar mindrift.jar
 
 EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=prod
