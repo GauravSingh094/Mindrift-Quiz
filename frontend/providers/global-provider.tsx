@@ -18,7 +18,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
           colorText: 'hsl(0 0% 98%)',
           colorTextSecondary: 'hsl(240 5% 64.9%)',
           colorInputText: 'hsl(0 0% 98%)',
-        },
+        } as any,
         elements: {
           card: 'bg-background-surface border border-border shadow-elevated-md',
         },

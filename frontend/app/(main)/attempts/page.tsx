@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { getAttemptHistory, getQuizzes } from "@/features/quiz/api";
 import { QuizAttempt, Quiz } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -12,6 +13,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function AttemptsHistoryPage() {
+  const router = useRouter();
   const [history, setHistory] = useState<QuizAttempt[]>([]);
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [isLoading, setIsLoading] = useState(true);

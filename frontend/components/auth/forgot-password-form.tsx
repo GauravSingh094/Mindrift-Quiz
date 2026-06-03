@@ -32,7 +32,7 @@ type RequestInput = z.infer<typeof requestSchema>;
 type ResetInput = z.infer<typeof resetSchema>;
 
 export function ForgotPasswordForm() {
-  const { isLoaded, signIn, setActive } = useSignIn();
+  const { isLoaded, signIn, setActive } = useSignIn() as any;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<"request" | "reset">("request");

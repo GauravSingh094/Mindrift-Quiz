@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CompetitionHistoryPage() {
   const { user } = useUser();

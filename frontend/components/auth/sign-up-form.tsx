@@ -35,7 +35,7 @@ type SignUpInput = z.infer<typeof signUpSchema>;
 type VerifyInput = z.infer<typeof verifySchema>;
 
 export function SignUpForm() {
-  const { isLoaded, signUp, setActive } = useSignUp();
+  const { isLoaded, signUp, setActive } = useSignUp() as any;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);

@@ -10,6 +10,7 @@ import { Brain, Lock, Mail, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import Link from "next/link";
 import {
   AuthCard,
   AuthHeader,
@@ -27,7 +28,7 @@ const loginSchema = z.object({
 type LoginInput = z.infer<typeof loginSchema>;
 
 export function SignInForm() {
-  const { isLoaded, signIn, setActive } = useSignIn();
+  const { isLoaded, signIn, setActive } = useSignIn() as any;
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);

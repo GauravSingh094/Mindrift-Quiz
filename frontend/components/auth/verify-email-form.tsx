@@ -25,7 +25,7 @@ const verifySchema = z.object({
 type VerifyInput = z.infer<typeof verifySchema>;
 
 export function VerifyEmailForm() {
-  const { isLoaded, signUp, setActive } = useSignUp();
+  const { isLoaded, signUp, setActive } = useSignUp() as any;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

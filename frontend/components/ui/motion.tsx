@@ -1,10 +1,9 @@
 'use client';
 
 import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, HTMLMotionProps } from 'framer-motion';
 
-interface MotionProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+interface MotionProps extends HTMLMotionProps<'div'> {
   delay?: number;
   duration?: number;
 }
@@ -89,8 +88,8 @@ export function Scale({ children, delay = 0, duration = 0.3, className, ...props
   );
 }
 
-interface StaggerProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+interface StaggerProps extends HTMLMotionProps<'div'> {
+  children?: React.ReactNode;
   staggerDelay?: number;
 }
 
@@ -108,7 +107,7 @@ export function Stagger({ children, staggerDelay = 0.05, className, ...props }: 
 
   const itemVariants = {
     hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
-    visible: { opacity: 1, y: 0, transition: { ease: 'easeOut', duration: 0.25 } },
+    visible: { opacity: 1, y: 0, transition: { ease: 'easeOut' as const, duration: 0.25 } },
   };
 
   const childrenArray = React.Children.toArray(children);

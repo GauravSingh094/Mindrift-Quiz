@@ -3,9 +3,9 @@
 import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-export function SkeletonPulse({ className }: { className?: string }) {
+export function SkeletonPulse({ className, style, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={`animate-pulse bg-zinc-900 rounded-md ${className}`} />
+    <div className={`animate-pulse bg-zinc-900 rounded-md ${className || ""}`} style={style} {...props} />
   );
 }
 
