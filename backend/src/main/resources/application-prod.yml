@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+      ssl:
+        enabled: true
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    com.mindrift: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+
+storage:
+  provider: ${STORAGE_PROVIDER:supabase}
+  supabase:
+    url: ${SUPABASE_URL}
+    service-role-key: ${SUPABASE_SERVICE_ROLE_KEY}
+    bucket: ${SUPABASE_STORAGE_BUCKET:mindrift-storage}
+    public-url: ${SUPABASE_PUBLIC_URL}
+

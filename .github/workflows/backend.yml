@@ -1,0 +1,51 @@
+name: Mindrift Backend CI-CD
+
+on:
+  push:
+    branches: [ main, master, dev ]
+    paths:
+      - 'backend/**'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Run Maven Build and Unit Tests
+        run: mvn clean test
+
+      - name: Security Vulnerability Scan (Trivy)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: 'backend'
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+
+      - name: Build Docker Production JRE Jars
+        run: mvn clean package -DskipTests
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Production Docker Image
+        run: |
+          docker build -t mindrift-backend:latest .

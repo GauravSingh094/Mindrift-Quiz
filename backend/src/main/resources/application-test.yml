@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  flyway:
+    enabled: true
+    clean-disabled: false
+
+clerk:
+  jwks-url: http://localhost:8089/.well-known/jwks.json
+
+storage:
+  local:
+    dir: ./storage_uploads_test

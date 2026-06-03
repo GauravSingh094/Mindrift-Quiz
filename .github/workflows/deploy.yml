@@ -1,0 +1,43 @@
+name: Mindrift Frontend Production Deploy Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  audit-test-build:
+    name: Audit, Test & Build compilation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-node-version: "20"
+          cache: "npm"
+
+      - name: Install Project Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run Complete Test Suite (100% Green Verification)
+        run: npx jest
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_Y2xlcmsubWluZHJpZmYuYXBwJA"
+          NEXT_PUBLIC_API_URL: "http://localhost:8080/api/v1"
+          NEXT_PUBLIC_SUPABASE_URL: "https://supabase.mindrift.app"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+          NEXT_PUBLIC_WSS_URL: "ws://localhost:8080/ws"
+
+      - name: Execute Next.js Compiler Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_Y2xlcmsubWluZHJpZmYuYXBwJA"
+          NEXT_PUBLIC_API_URL: "http://localhost:8080/api/v1"
+          NEXT_PUBLIC_SUPABASE_URL: "https://supabase.mindrift.app"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+          NEXT_PUBLIC_WSS_URL: "ws://localhost:8080/ws"

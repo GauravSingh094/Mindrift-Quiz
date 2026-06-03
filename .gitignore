@@ -1,0 +1,42 @@
+# dependencies
+/frontend/node_modules/
+/frontend/.pnp
+/frontend/.pnp.js
+/frontend/.yarn/install-state.gz
+
+# testing
+/frontend/coverage/
+
+# next.js
+/frontend/.next/
+/frontend/out/
+
+# production
+/frontend/build/
+
+# misc
+.DS_Store
+*.pem
+*.log
+
+# local env files
+/frontend/.env*.local
+/frontend/.env.local
+
+# vercel
+/frontend/.vercel/
+
+# typescript
+/frontend/*.tsbuildinfo
+/frontend/next-env.d.ts
+
+# clerk configuration
+/frontend/.clerk/
+
+# backend env and build files
+/backend/target/
+/backend/.env
+/backend/logs/
+/target/
+/.idea/
+/.vscode/
