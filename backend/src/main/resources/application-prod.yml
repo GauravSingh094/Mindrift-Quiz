@@ -1,15 +1,15 @@
 spring:
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: ${DATABASE_URL:${SPRING_DATASOURCE_URL}}
+    username: ${DATABASE_USERNAME:${SPRING_DATASOURCE_USERNAME}}
+    password: ${DATABASE_PASSWORD:${SPRING_DATASOURCE_PASSWORD}}
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD}
+      host: ${REDIS_HOST:${SPRING_DATA_REDIS_HOST:localhost}}
+      port: ${REDIS_PORT:${SPRING_DATA_REDIS_PORT:6379}}
+      password: ${REDIS_PASSWORD:${SPRING_DATA_REDIS_PASSWORD:}}
       ssl:
-        enabled: true
+        enabled: ${REDIS_SSL_ENABLED:false}
   jpa:
     show-sql: false
 
@@ -26,4 +26,3 @@ storage:
     service-role-key: ${SUPABASE_SERVICE_ROLE_KEY}
     bucket: ${SUPABASE_STORAGE_BUCKET:mindrift-storage}
     public-url: ${SUPABASE_PUBLIC_URL}
-
