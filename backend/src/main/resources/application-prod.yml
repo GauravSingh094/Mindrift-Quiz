@@ -3,6 +3,12 @@ spring:
     url: ${DATABASE_URL:${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/mindrift_db}}
     username: ${DATABASE_USERNAME:${SPRING_DATASOURCE_USERNAME:mindrift_admin}}
     password: ${DATABASE_PASSWORD:${SPRING_DATASOURCE_PASSWORD:admin_production_password_2026}}
+    hikari:
+      maximum-pool-size: 4
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 600000
+      connection-timeout: 10000
   data:
     redis:
       host: ${REDIS_HOST:${SPRING_DATA_REDIS_HOST:localhost}}
@@ -10,6 +16,11 @@ spring:
       password: ${REDIS_PASSWORD:${SPRING_DATA_REDIS_PASSWORD:}}
       ssl:
         enabled: ${REDIS_SSL_ENABLED:false}
+      lettuce:
+        pool:
+          max-active: 4
+          max-idle: 2
+          min-idle: 1
   jpa:
     show-sql: false
 

@@ -18,10 +18,12 @@ COPY --chown=SreAdmin:SreAdmin --from=builder /app/target/mindrift-backend-1.0.0
 EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=prod
 
-# JVM Tuning for Production Containers (optimized G1 Garbage Collector)
+# JVM Tuning for Low-Memory (512MB) Production Containers
+# - Uses Serial Garbage Collector (lowest footprint)
+# - Caps heap dynamically and sets Metaspace / Stack limits to prevent out of memory
 ENTRYPOINT ["java", \
-            "-XX:+UseG1GC", \
-            "-XX:MaxRAMPercentage=75.0", \
-            "-XX:G1ReservePercent=15", \
-            "-XX:InitiatingHeapOccupancyPercent=45", \
+            "-XX:+UseSerialGC", \
+            "-Xmx200m", \
+            "-XX:MaxMetaspaceSize=100m", \
+            "-Xss256k", \
             "-jar", "mindrift.jar"]

@@ -58,9 +58,14 @@ public class RedissonConfig {
         }
 
         String address = String.format("redis://%s:%d", finalHost, finalPort);
+        config.setNettyThreads(2);
         config.useSingleServer()
               .setAddress(address)
               .setPassword(finalPassword == null || finalPassword.isEmpty() ? null : finalPassword)
+              .setConnectionPoolSize(4)
+              .setConnectionMinimumIdleSize(1)
+              .setSubscriptionConnectionPoolSize(4)
+              .setSubscriptionConnectionMinimumIdleSize(1)
               // Shorter timeouts so startup doesn't hang for 30 seconds
               .setConnectTimeout(3000)
               .setTimeout(3000)
@@ -74,8 +79,13 @@ public class RedissonConfig {
             log.warn("Redis not available at {}:{} — attempting localhost:6379 fallback. Error: {}", finalHost, finalPort, e.getMessage());
             try {
                 Config fallbackConfig = new Config();
+                fallbackConfig.setNettyThreads(2);
                 fallbackConfig.useSingleServer()
                       .setAddress("redis://localhost:6379")
+                      .setConnectionPoolSize(4)
+                      .setConnectionMinimumIdleSize(1)
+                      .setSubscriptionConnectionPoolSize(4)
+                      .setSubscriptionConnectionMinimumIdleSize(1)
                       .setConnectTimeout(1000)
                       .setTimeout(1000)
                       .setRetryAttempts(0);
@@ -83,13 +93,16 @@ public class RedissonConfig {
             } catch (Exception ex) {
                 log.error("Local Redis fallback failed. Creating disconnected config. Error: {}", ex.getMessage());
                 Config disconnectedConfig = new Config();
+                disconnectedConfig.setNettyThreads(1);
                 disconnectedConfig.useSingleServer()
                       .setAddress("redis://localhost:6379")
                       .setConnectTimeout(1000)
                       .setTimeout(1000)
                       .setRetryAttempts(0)
                       .setConnectionPoolSize(1)
-                      .setConnectionMinimumIdleSize(0);
+                      .setConnectionMinimumIdleSize(0)
+                      .setSubscriptionConnectionPoolSize(1)
+                      .setSubscriptionConnectionMinimumIdleSize(0);
                 return Redisson.create(disconnectedConfig);
             }
         }
