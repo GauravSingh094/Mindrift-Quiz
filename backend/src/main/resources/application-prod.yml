@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DATABASE_URL:${SPRING_DATASOURCE_URL}}
-    username: ${DATABASE_USERNAME:${SPRING_DATASOURCE_USERNAME}}
-    password: ${DATABASE_PASSWORD:${SPRING_DATASOURCE_PASSWORD}}
+    url: ${DATABASE_URL:${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/mindrift_db}}
+    username: ${DATABASE_USERNAME:${SPRING_DATASOURCE_USERNAME:mindrift_admin}}
+    password: ${DATABASE_PASSWORD:${SPRING_DATASOURCE_PASSWORD:admin_production_password_2026}}
   data:
     redis:
       host: ${REDIS_HOST:${SPRING_DATA_REDIS_HOST:localhost}}
@@ -22,7 +22,7 @@ logging:
 storage:
   provider: ${STORAGE_PROVIDER:supabase}
   supabase:
-    url: ${SUPABASE_URL}
-    service-role-key: ${SUPABASE_SERVICE_ROLE_KEY}
+    url: ${SUPABASE_URL:}
+    service-role-key: ${SUPABASE_SERVICE_ROLE_KEY:}
     bucket: ${SUPABASE_STORAGE_BUCKET:mindrift-storage}
-    public-url: ${SUPABASE_PUBLIC_URL}
+    public-url: ${SUPABASE_PUBLIC_URL:}
