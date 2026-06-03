@@ -24,10 +24,43 @@ public class RedissonConfig {
     @Bean
     public RedissonClient redissonClient() {
         Config config = new Config();
-        String address = String.format("redis://%s:%d", redisHost, redisPort);
+        
+        String finalHost = redisHost;
+        int finalPort = redisPort;
+        String finalPassword = redisPassword;
+
+        String redisUrl = System.getenv("REDIS_URL");
+        if (redisUrl == null) {
+            redisUrl = System.getProperty("REDIS_URL");
+        }
+
+        if (redisUrl != null && !redisUrl.trim().isEmpty()) {
+            try {
+                java.net.URI uri = new java.net.URI(redisUrl);
+                if (uri.getHost() != null) {
+                    finalHost = uri.getHost();
+                }
+                if (uri.getPort() != -1) {
+                    finalPort = uri.getPort();
+                }
+                if (uri.getUserInfo() != null) {
+                    String[] userInfo = uri.getUserInfo().split(":");
+                    if (userInfo.length > 1) {
+                        finalPassword = userInfo[1];
+                    } else if (userInfo.length > 0) {
+                        finalPassword = userInfo[0];
+                    }
+                }
+                log.info("Configuring Redisson via REDIS_URL: host={}, port={}", finalHost, finalPort);
+            } catch (Exception e) {
+                log.error("Failed to parse REDIS_URL: {}", redisUrl, e);
+            }
+        }
+
+        String address = String.format("redis://%s:%d", finalHost, finalPort);
         config.useSingleServer()
               .setAddress(address)
-              .setPassword(redisPassword.isEmpty() ? null : redisPassword)
+              .setPassword(finalPassword == null || finalPassword.isEmpty() ? null : finalPassword)
               // Shorter timeouts so startup doesn't hang for 30 seconds
               .setConnectTimeout(3000)
               .setTimeout(3000)
@@ -35,15 +68,15 @@ public class RedissonConfig {
               .setRetryInterval(500);
         try {
             RedissonClient client = Redisson.create(config);
-            log.info("Redisson connected to Redis at {}:{}", redisHost, redisPort);
+            log.info("Redisson connected to Redis at {}:{}", finalHost, finalPort);
             return client;
         } catch (Exception e) {
             log.warn("Redis not available at {}:{} — distributed locking disabled. " +
-                     "Sessions will use in-memory fallback. Error: {}", redisHost, redisPort, e.getMessage());
+                     "Sessions will use in-memory fallback. Error: {}", finalHost, finalPort, e.getMessage());
             // Return a no-op / disconnected client that won't block startup
             config.useSingleServer()
                   .setAddress(address)
-                  .setPassword(redisPassword.isEmpty() ? null : redisPassword)
+                  .setPassword(finalPassword == null || finalPassword.isEmpty() ? null : finalPassword)
                   .setConnectTimeout(1000)
                   .setTimeout(1000)
                   .setRetryAttempts(0)
