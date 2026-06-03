@@ -23,7 +23,7 @@ ENV SPRING_PROFILES_ACTIVE=prod
 # - Caps heap dynamically and sets Metaspace / Stack limits to prevent out of memory
 ENTRYPOINT ["java", \
             "-XX:+UseSerialGC", \
-            "-Xmx200m", \
-            "-XX:MaxMetaspaceSize=100m", \
+            "-Xmx140m", \
+            "-XX:MaxMetaspaceSize=200m", \
             "-Xss256k", \
             "-jar", "mindrift.jar"]
