@@ -71,19 +71,27 @@ public class RedissonConfig {
             log.info("Redisson connected to Redis at {}:{}", finalHost, finalPort);
             return client;
         } catch (Exception e) {
-            log.warn("Redis not available at {}:{} — distributed locking disabled. " +
-                     "Sessions will use in-memory fallback. Error: {}", finalHost, finalPort, e.getMessage());
-            // Return a no-op / disconnected client that won't block startup
-            config.useSingleServer()
-                  .setAddress(address)
-                  .setPassword(finalPassword == null || finalPassword.isEmpty() ? null : finalPassword)
-                  .setConnectTimeout(1000)
-                  .setTimeout(1000)
-                  .setRetryAttempts(0)
-                  .setConnectionPoolSize(1)
-                  .setConnectionMinimumIdleSize(0);
-            // We still create the client — Redisson handles reconnection automatically
-            return Redisson.create(config);
+            log.warn("Redis not available at {}:{} — attempting localhost:6379 fallback. Error: {}", finalHost, finalPort, e.getMessage());
+            try {
+                Config fallbackConfig = new Config();
+                fallbackConfig.useSingleServer()
+                      .setAddress("redis://localhost:6379")
+                      .setConnectTimeout(1000)
+                      .setTimeout(1000)
+                      .setRetryAttempts(0);
+                return Redisson.create(fallbackConfig);
+            } catch (Exception ex) {
+                log.error("Local Redis fallback failed. Creating disconnected config. Error: {}", ex.getMessage());
+                Config disconnectedConfig = new Config();
+                disconnectedConfig.useSingleServer()
+                      .setAddress("redis://localhost:6379")
+                      .setConnectTimeout(1000)
+                      .setTimeout(1000)
+                      .setRetryAttempts(0)
+                      .setConnectionPoolSize(1)
+                      .setConnectionMinimumIdleSize(0);
+                return Redisson.create(disconnectedConfig);
+            }
         }
     }
 }
